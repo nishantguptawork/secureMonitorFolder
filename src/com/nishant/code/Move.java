@@ -17,6 +17,7 @@ public class Move implements Job {
 
 	private String inputFolder;
 	private String outputFolder;
+	// private String archiveFolder;
 
 	private void listf(String directoryName, ArrayList<File> files) throws IOException {
 		File directory = new File(directoryName);
@@ -34,6 +35,11 @@ public class Move implements Job {
 		}
 	}
 
+	// private Boolean ifExistsInArchiveFolder(File fileToCheck) {
+	// File[] archiveFilesList = new File(archiveFolder).listFiles();
+	// return Arrays.asList(archiveFilesList).contains(fileToCheck);
+	// }
+
 	private void moveFiles() throws IOException {
 		System.out.println("executing MOVE");
 		ArrayList<File> filesList = new ArrayList<File>();
@@ -46,11 +52,17 @@ public class Move implements Job {
 			String dest = source.replaceAll(inputFolder, outputFolder);
 			// get exact absolute path to the secured output folder
 			dest = dest.substring(0, dest.indexOf(outputFolder)).concat(outputFolder).concat("\\").concat(fileName);
-			// System.out.println("source, " + source + ", destination, " +
-			// dest);
 			try {
-				System.out.println("copying file " + i.getName() + " to destination " + dest);
+				// if (!ifExistsInArchiveFolder(i)) {
+				// System.out.println("File not found in archive folder. Hence,
+				// copying file " + i.getName()
+				// + " to destination " + dest);
 				Files.copy(Paths.get(source), Paths.get(dest));
+				// } else {
+				// System.out.println("File already exists in archive folder : "
+				// + i.getName());
+				// }
+
 			} catch (FileAlreadyExistsException e) {
 				System.out.println("File " + i.getName() + " already exists in the secured folder");
 				// e.printStackTrace();
@@ -64,7 +76,7 @@ public class Move implements Job {
 		try {
 			this.moveFiles();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -77,11 +89,7 @@ public class Move implements Job {
 		}
 		this.inputFolder = (String) schedulerContext.get("inputFolder");
 		this.outputFolder = (String) schedulerContext.get("outputFolder");
+		// this.archiveFolder = (String) schedulerContext.get("archiveFolder");
 	}
 
-	// public void printFiles() throws IOException{
-	// Files.newDirectoryStream(Paths.get("temp"),
-	// path -> path.toString().endsWith(".txt"))
-	// .forEach(System.out::println);
-	// }
 }

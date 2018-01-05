@@ -23,6 +23,7 @@ public class Monitor implements Job {
 
 	private String monitorFolder;
 	private long thresholdSize;
+	// private String archiveFolder;
 
 	public void makeSecure() throws IOException {
 		System.out.println("executing MONITOR");
@@ -37,7 +38,7 @@ public class Monitor implements Job {
 			return Files.walk(Paths.get(monitorFolder)).mapToLong(p -> p.toFile().length()).sum();
 		} catch (IOException e) {
 			System.out.println("Unable to size of monitorFolder: secured");
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		return 0;
 	}
@@ -49,7 +50,8 @@ public class Monitor implements Job {
 					try {
 						Files.delete(execeutableFile);
 					} catch (IOException e) {
-						e.printStackTrace();
+						System.out.println("Unable to delete executable file : " + execeutableFile);
+						// e.printStackTrace();
 					}
 				});
 	}
@@ -87,10 +89,18 @@ public class Monitor implements Job {
 			Queue<File> sortedFilesQueue = filesSortedCreationTime();
 			while (getfolderSize() > thresholdSize) {
 				try {
+					// File fileToBeMovedToArvhive = sortedFilesQueue.remove();
+					// moving files to archived folder
+					// String archivedFilePath = new
+					// File(archiveFolder).getAbsolutePath() + "\\"
+					// + fileToBeMovedToArvhive.getName();
+					// Path archiveDestination = Paths.get(archivedFilePath);
+					// Files.move(Paths.get(fileToBeMovedToArvhive.getAbsolutePath()),
+					// archiveDestination);
 					Files.delete(Paths.get(sortedFilesQueue.remove().getAbsolutePath()));
 				} catch (IOException e) {
 					System.out.println("Unable to delete file to reduce size from threshold size");
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 				;
 			}
@@ -112,7 +122,7 @@ public class Monitor implements Job {
 		try {
 			this.makeSecure();
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -125,6 +135,7 @@ public class Monitor implements Job {
 		}
 		this.monitorFolder = (String) schedulerContext.get("monitorFolder");
 		this.thresholdSize = (long) schedulerContext.get("monitorThreshold");
+		// this.archiveFolder = (String) schedulerContext.get("archiveFolder");
 	}
 
 }

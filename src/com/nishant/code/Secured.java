@@ -25,6 +25,7 @@ public class Secured {
 
 	private static final String inputFolder = "temp";
 	private static final String outputFolder = "secured";
+	// private static final String archiveFolder = "archived";
 	private static final long thresholdSize = 25;// 100 MB = 104857600 bytes
 
 	/**
@@ -64,9 +65,11 @@ public class Secured {
 			// adding variables to context to be passed on to relevant jobs
 			scheduler.getContext().put("inputFolder", inputFolder);
 			scheduler.getContext().put("outputFolder", outputFolder);
+			// scheduler.getContext().put("archiveFolder", archiveFolder);
 
 			scheduler.getContext().put("monitorFolder", outputFolder);
 			scheduler.getContext().put("monitorThreshold", thresholdSize);
+			// scheduler.getContext().put("archiveFolder", archiveFolder);
 
 			// schedule the relevant jobs
 			scheduler.scheduleJob(moveJob, moveTrigger);
@@ -74,7 +77,6 @@ public class Secured {
 
 			// Commenting out shutdown because we dont want the scheduler to be
 			// shut down
-
 			// scheduler.shutdown();
 
 		} catch (SchedulerException e) {

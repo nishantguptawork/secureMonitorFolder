@@ -1,0 +1,6 @@
+Improve upon these:
+	synchronisation issues because of moving a file and at the same time reading files from directory for archiving
+	custom exception classes for better exception handling
+	Create a class extending File of java 7 which has the compare and delete and other file operations in one place. It will also have a file comparison method which compares aabsolute file.
+	Create folders /secured and /archived when they dont exist on startup
+	
